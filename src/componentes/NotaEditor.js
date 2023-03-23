@@ -1,32 +1,21 @@
 import React, { useState } from "react"
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native"
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Picker } from "react-native-web"
 
 export default function NotaEditor({mostraNotas}) {
 
+  const [titulo, setTitulo] = useState("")
+  const [categoria, setCategoria] = useState("Pessoal")
   const [texto, setTexto] = useState("")
   const [modalVisivel, setModalVisivel] = useState(false)
 
   async function salvaNota() {
-    const novoId  = await geraId()
     const umaNota = {
-      id: novoId.toString(),
+      id: "1",
       texto: texto,
     }
     await AsyncStorage.setItem(umaNota.id, umaNota.texto)
     mostraNotas()
-  }
-
-  async function geraId() {
-    const todasChaves = await AsyncStorage.getAllKeys()
-    if(todasChaves <= 0) {
-      return 1
-    }
-    return todasChaves.length + 1
-  }
-
-  async function mostraNota() {
-    console.log(await AsyncStorage.getItem("1"))
   }
 
   return(
@@ -41,14 +30,22 @@ export default function NotaEditor({mostraNotas}) {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={estilos.modal}>
               <Text style={estilos.modalTitulo}>Criar nota</Text>
-              <Text style={estilos.modalSubTitulo}>Conteúdo da nota</Text>
+              <Text style={estilos.modalSubTitulo}>Titulo da nota</Text>
               <TextInput 
                 style={estilos.modalInput}
-                multiline={true}
-                numberOfLines={3}
-                onChangeText={novoTexto => setTexto(novoTexto)}
-                placeholder="Digite aqui seu lembrete"
-                value={texto}/>
+                onChangeText={novoTitulo => setTitulo(novoTitulo)}
+                placeholder="Digite um titulo"
+                value={titulo}/>
+              <Text style={estilos.modalSubTitulo}>Categoria</Text>
+              <View style={estilos.modalPicker}>
+                <Picker
+                  selectedValue={categoria}
+                  onValueChange={novaCategoria => setCategoria(novaCategoria)}>
+                    <Picker.Item label="Pessoal" value="Pessoal"/>
+                    <Picker.Item label="Trabalho" value="Pessoal"/>
+                    <Picker.Item label="Outros" value="Outros"/>
+                </Picker>
+              </View>
               <View style={estilos.modalBotoes}>
                 <TouchableOpacity style={estilos.modalBotaoSalvar} onPress={() => {salvaNota()}}>
                   <Text style={estilos.modalBotaoTexto}>Salvar</Text>
