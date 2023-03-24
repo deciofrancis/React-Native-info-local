@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Modal, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native"
-import { Picker } from "react-native-web"
+import { Picker } from "@react-native-picker/picker"
 
 export default function NotaEditor({mostraNotas}) {
 
@@ -11,10 +11,11 @@ export default function NotaEditor({mostraNotas}) {
 
   async function salvaNota() {
     const umaNota = {
-      id: "1",
+      titulo: titulo,
+      categoria: categoria,
       texto: texto,
     }
-    await AsyncStorage.setItem(umaNota.id, umaNota.texto)
+    await adicionaNota(umaNota)
     mostraNotas()
   }
 
@@ -42,7 +43,7 @@ export default function NotaEditor({mostraNotas}) {
                   selectedValue={categoria}
                   onValueChange={novaCategoria => setCategoria(novaCategoria)}>
                     <Picker.Item label="Pessoal" value="Pessoal"/>
-                    <Picker.Item label="Trabalho" value="Pessoal"/>
+                    <Picker.Item label="Trabalho" value="Trabalho"/>
                     <Picker.Item label="Outros" value="Outros"/>
                 </Picker>
               </View>
