@@ -1,1 +1,2 @@
-# React-Native-info-local
+# React Native: guardando informações localmente
+
